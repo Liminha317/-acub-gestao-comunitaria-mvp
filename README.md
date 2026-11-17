@@ -27,3 +27,8 @@ acub-gestao-comunitaria-mvp/
 ├── requirements.txt     # Dependências fixadas do projeto
 └── README.md            # Documentação técnica e funcional
 ```
+
+## Como Executar Localmente
+1. Clone o repositório: `git clone https://github.com`
+2. Instale as dependências: `pip install -r requirements.txt`
+3. Execute os testes automatizados: `pytest`
