@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ACUB — Consulta Rápida na Fila</title>
+  <link href="https://jsdelivr.net" rel="stylesheet">
+  <style>
+    body { font-size: 1.05rem; }
+    .btn-acessivel { min-height: 48px; font-weight: 600; }
+  </style>
+</head>
+<body class="bg-light">
+  <header class="bg-primary text-white p-3 d-flex justify-content-between align-items-center">
+    <h1 class="h5 m-0">ACUB — Gestão Comunitária</h1>
+    <a href="/logout/" class="btn btn-light btn-sm fw-bold">Sair</a>
+  </header>
+
+  <main class="container py-4" style="max-width: 600px;">
+    <form method="get" class="mb-4">
+      <label for="busca-familia" class="form-label fw-bold">Nome ou NIF do responsável</label>
+      <div class="input-group">
+        <input id="busca-familia" name="q" type="text" value="{{ termo }}" class="form-control form-control-lg" placeholder="Ex: Ana Clara ou 123.456.789-00">
+        <button type="submit" class="btn btn-primary btn-acessivel px-4">Buscar</button>
+      </div>
+    </form>
+
+    {% for r in resultados %}
+      <div class="card shadow-sm mb-3">
+        <div class="card-body">
+          <h2 class="h5 card-title">{{ r.familia.nome_responsavel }}</h2>
+          <p class="mb-1"><strong>NIF:</strong> {{ r.familia.nif_documento }}</p>
+          <p class="mb-3"><strong>Endereço:</strong> {{ r.familia.endereco_bairro }}</p>
+
+          {% if r.ja_retirou %}
+            <div class="alert alert-danger fw-bold" role="alert">
+              &#9888; Já retirou cesta neste mês ({{ competencia }})
+            </div>
+          {% else %}
+            <div class="alert alert-success fw-bold" role="alert">
+              &#10004; Apta para retirada ({{ competencia }})
+            </div>
+            <form method="post" action="/entregar/{{ r.familia.id }}/">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success w-100 btn-acessivel">
+                Confirmar Entrega de Cesta
+              </button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </main>
+</body>
+</html>
